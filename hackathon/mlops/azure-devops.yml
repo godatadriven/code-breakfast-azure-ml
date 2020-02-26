@@ -1,0 +1,98 @@
+variables:
+  python.version: 3.7
+  azure_ml.service_connection: azure-julian-ml
+  azure_ml.resource_group: julian-playground
+  azure_ml.workspace: julian-ml
+  conda.env_name: model-env
+  conda.env_file: environment.yml
+
+stages:
+  - stage: CI
+    jobs:
+      - job: CI
+        steps:
+          - task: UsePythonVersion@0
+            displayName: Use Python $(python.version)
+            inputs:
+              versionSpec: $(python.version)
+          - script: pip install pre-commit
+            displayName: Install pre-commit
+          - script: pre-commit run
+            displayName: Run pre-commit hooks
+      - job: PublishPipeline
+        dependsOn: CI
+        steps:
+          - bash: echo "##vso[task.prependpath]$CONDA/bin"
+            displayName: Add conda to PATH
+          - script: conda env create -n $(conda.env_name) -f $(conda.env_file) --quiet
+            displayName: Create conda environment
+          - task: AzureCLI@1
+            displayName: Publish ML Pipeline
+            inputs:
+              azureSubscription: $(azure_ml.service_connection)
+              scriptLocation: inlineScript
+              inlineScript: |
+                set -e
+                export AZURE_ML_SUBSCRIPTION=$(az account show --query id -o tsv)
+                export AZURE_ML_RESOURCE_GROUP=$(azure_ml.resource_group)
+                export AZURE_ML_WORKSPACE=$(azure_ml.workspace)
+                source activate $(conda.env_name)
+                PYTHONPATH=$(Build.SourcesDirectory) python scripts/publish_ml_pipeline.py --pipeline_name titanic --pipeline_description "Titanic pipeline (build: $(Build.BuildId))" --model_dir model --cluster_name my-cpu-cluster --pipeline_id_path $(System.DefaultWorkingDirectory)/pipeline_id.txt
+          - publish: $(System.DefaultWorkingDirectory)/pipeline_id.txt
+            artifact: PipelineID
+  - stage: TrainModel
+    jobs:
+      - job: TriggerMLPipeline
+        steps:
+          - download: current
+            artifact: PipelineID
+            displayName: Fetch published pipeline ID
+          - bash: echo "##vso[task.prependpath]$CONDA/bin"
+            displayName: Add conda to PATH
+          - script: conda env create -n $(conda.env_name) -f $(conda.env_file) --quiet
+            displayName: Create conda environment
+          - task: AzureCLI@1
+            displayName: Trigger ML Pipeline
+            inputs:
+              azureSubscription: $(azure_ml.service_connection)
+              scriptLocation: inlineScript
+              inlineScript: |
+                set -e
+                export AZURE_ML_SUBSCRIPTION=$(az account show --query id -o tsv)
+                export AZURE_ML_RESOURCE_GROUP=$(azure_ml.resource_group)
+                export AZURE_ML_WORKSPACE=$(azure_ml.workspace)
+                source activate $(conda.env_name)
+                PYTHONPATH=$(Build.SourcesDirectory) python scripts/trigger_ml_pipeline.py --pipeline_id `cat $(Pipeline.Workspace)/PipelineID/pipeline_id.txt` --experiment_name titanic-v1
+  - stage: DeployModel
+    jobs:
+      - job: DeployModel
+        steps:
+          # TODO: Get correct version of the model to deploy.
+          - bash: echo "##vso[task.prependpath]$CONDA/bin"
+            displayName: Add conda to PATH
+          - script: conda env create -n $(conda.env_name) -f $(conda.env_file) --quiet
+            displayName: Create conda environment
+          - task: AzureCLI@1
+            displayName: Deploy webservice
+            inputs:
+              azureSubscription: $(azure_ml.service_connection)
+              scriptLocation: inlineScript
+              inlineScript: |
+                set -e
+                export AZURE_ML_SUBSCRIPTION=$(az account show --query id -o tsv)
+                export AZURE_ML_RESOURCE_GROUP=$(azure_ml.resource_group)
+                export AZURE_ML_WORKSPACE=$(azure_ml.workspace)
+                source activate $(conda.env_name)
+                PYTHONPATH=$(Build.SourcesDirectory) python scripts/deploy_webservice.py --model_name titanic --model_dir $(Build.SourcesDirectory)/model --wait
+          - task: AzureCLI@1
+            displayName: Test webservice
+            inputs:
+              azureSubscription: $(azure_ml.service_connection)
+              scriptLocation: inlineScript
+              inlineScript: |
+                set -e
+                export AZURE_ML_SUBSCRIPTION=$(az account show --query id -o tsv)
+                export AZURE_ML_RESOURCE_GROUP=$(azure_ml.resource_group)
+                export AZURE_ML_WORKSPACE=$(azure_ml.workspace)
+                source activate $(conda.env_name)
+                PYTHONPATH=$(Build.SourcesDirectory) python scripts/test_webservice.py --service_name titanic --test_dir $(Build.SourcesDirectory)/data

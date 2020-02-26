@@ -1,0 +1,14 @@
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python==3.7.3
+  - pandas
+  - scikit-learn
+  - click
+  - joblib
+  - pip
+  - pip:
+    - azureml-defaults
+    - azureml-core
+    - azureml-dataprep[fuse,pandas]

@@ -1,0 +1,21 @@
+name: azureml-titanic-mlops
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python==3.7.*
+  - pip
+  - jupyterlab
+  - python-dotenv
+  - pre-commit
+
+  # Model related
+  - scikit-learn
+  - click
+  - joblib
+  - pandas
+
+  - pip:
+    - azureml-core
+    - azureml-dataprep[fuse,pandas]
+    - azureml-pipeline
