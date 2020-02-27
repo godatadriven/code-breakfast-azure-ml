@@ -15,10 +15,10 @@ run = Run.get_context()
 
 # Here we reference in input dataset by name:
 titanic_ds = run.input_datasets["titanic_training"]
-validation = run.input_datasets["validation"]
+# validation = run.input_datasets["validation"]
 
 df: pd.DataFrame = titanic_ds.to_pandas_dataframe()
-test_ds: pd.DataFrame = validation.to_pandas_dataframe()
+# test_ds: pd.DataFrame = validation.to_pandas_dataframe()
 
 print(df)
 
@@ -46,10 +46,11 @@ pipeline = Pipeline([
 clf = pipeline.fit(X_train, y_train)
 
 # Challenge: log model metrics:
-X_test = test_ds.drop("Survived", axis=1)
-y_test = test_ds["Survived"]
-predictions = clf.predict(X_test)
-mse = mean_squared_error(y_test, predictions)
+
+# X_test = test_ds.drop("Survived", axis=1)
+# y_test = test_ds["Survived"]
+# predictions = clf.predict(X_test)
+# mse = mean_squared_error(y_test, predictions)
 # use 'mse' to log as a metric, in this run.
 
 
