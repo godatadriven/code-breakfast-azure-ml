@@ -1,0 +1,21 @@
+# conda env update --file environment.yml
+name: azureml-titanic
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python==3.7.6
+  - pip
+  # Notebooks:
+  - jupyter
+  - ipykernel
+
+  # Model related
+  - scikit-learn==0.20.3
+  - joblib
+  - pandas
+
+  - pip:
+    # Dependencies for training environment.
+    - azureml-core==1.0.85.1
+    - azureml-dataprep[fuse,pandas]==1.1.38
