@@ -1,8 +1,8 @@
 # Azure Step-by-Step hackathon
 
-In this hackathon, to get you started and familiar with AzureML
+In this hackathon, we aim to get you familiar with the different parts of Azure ML.
 
-The goal of this part of the hackaton is to touch various components of the AzureML. Use Python in notebooks to interact with these components. We connect, train, register and deploy a model in a step by step basis. There are various challenges which you can add or implement. You do _not_ need to be a data-science to model the solution and follow these steps. 
+The goal of this hackathon is to touch various components of the Azure ML, using Python in notebooks to explore these components. The overall idea is to connect, train, register and deploy a model in a step-by-step basis. There are various challenges which you can add or implement.  Note that you do _not_ need to be a data scientist to model the solution and follow these steps.
 
 ## Getting started
 
@@ -10,7 +10,7 @@ To start the hackathon, follow these steps:
 
 * Create a conda environment using:
   ```
-  cd hackaton/step-by-step/
+  cd hackathon/step-by-step/
   conda env update --file environment.yml
   conda activate azureml-titanic
   ```

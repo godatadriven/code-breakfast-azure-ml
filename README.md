@@ -1,30 +1,40 @@
 # code-breakfast-azure-ml
+
 Material for the AzureML code breakfast.
 
-### Follow the step-by-step notebooks
+## Hackathons
 
-For a simple clear step-by-step guides. If you want to skip this feel free to follow some examples.
+The material contains two different hackathons for exploring Azure ML.
 
-### How-to-use-AzureML
+### Step-by-step intro to Azure ML
 
-In this directory there are plenty of examples in this code breakfast we want to focus on how-to-use-azure-ml.
+The first hackathon, step-by-step focusses on giving a step-by-step introduction
+to Azure ML, in which we step through the different components of Azure ML using
+a play-through example in notebooks.
 
-![images/clone_samples.png](images/clone_samples.png)
+You can find the material for this hackathon under `hackathon/step-by-step`.
 
-Some good starting point:
-- `how-to-use-azureml/training/train-within-notebook`
+### MLOps in Azure ML
 
-### Challenges
+In the second hackathon, we provide a small example of how to get started with
+Azure ML Pipelines and how to use these pipelines to do MLOps in Azure ML. The
+hackathon starts off with a Notebook example of how to start building an ML pipeline
+and how to trigger the pipeline to train a model. In the final part of the hackathon,
+we have an open-ended exercise aimed at automating the entire CI/CD process of your
+model using Azure Pipelines.
 
-Pick and choose your battles:
+You can find the material for this hackathon under `hackathon/mlops`.
+
+## Extra challenges
+
+Should you manage to finish both hackathons, here are some extra ideas you can
+try implementing in either example case:
 
 - Upload a File and register as a Tabular DataSet
-- Connect second StorageAccount (gen2) as a DataStore 
+- Connect a second StorageAccount (gen2) as a DataStore
 - Connect a SqlDatabase as a DataStore
-- Register a SkLearn Model (after fit) 
-- Deploy titanic model in Azure Container)
-- Create a new Version of a DataSet with more records
-- Change a DataSert and use the data drift detection
+- Train/register a your model as an SkLearn Model (after fit)
+- Create a new version of a data set with more records
+- Change a data set and use the data drift detection
 - Use Databricks as a compute target for a large datasets
-- Monitor: Collect metrics from a running model 
-- Integrate Azure DevOps for deploying new models (CD) 
+- Monitoring: collect metrics from a running model
