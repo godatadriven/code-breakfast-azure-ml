@@ -1,9 +1,9 @@
 variables:
   python.version: 3.7
-  azure_ml.service_connection: azure-julian-ml
-  azure_ml.resource_group: julian-playground
-  azure_ml.workspace: julian-ml
-  conda.env_name: model-env
+  azure_ml.service_connection: <YOUR_SERVICE_CONNECTION>
+  azure_ml.resource_group: <YOUR_RESOURCE_GROUP>
+  azure_ml.workspace: <YOUR_ML_WORKSPACE>
+  conda.env_name: model-env 
   conda.env_file: environment.yml
 
 stages:
