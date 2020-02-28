@@ -4,10 +4,26 @@ In this hackathon, we aim to get you familiar with the different parts of Azure 
 
 The goal of this hackathon is to touch various components of the Azure ML, using Python in notebooks to explore these components. The overall idea is to connect, train, register and deploy a model in a step-by-step basis. There are various challenges which you can add or implement.  Note that you do _not_ need to be a data scientist to model the solution and follow these steps.
 
-## Getting started
+### Getting started on Azure Notebook VM
+
+Working on the remove VM is preferred, because its working out of the box. No need to configure conda and setup docker.
+
+- Launch the AzureML workspace
+- Click on  the Compute tab from the menu 
+- Spin up a Compute Notebook VM and wait ~5 minutes...
+- Open Jupyter or JupyterLab
+- Open a new Terminal
+- `cd Users/your-user`
+- `git clone https://github.com/godatadriven/code-breakfast-azure-ml.git codebreakfast`
+
+The Notebook VM has the correct packages in the conda environment already present.
+The `config.json` is also present on your VM, so you can skip the first step in the first notebook 
+
+### Getting started on local machine
 
 To start the hackathon, follow these steps:
 
+* Make sure you have docker up 'n running
 * Create a conda environment using:
   ```
   cd hackathon/step-by-step/
@@ -24,4 +40,8 @@ To start the hackathon, follow these steps:
 
 ## Follow the notebooks
 
-Open the notebooks in order, so start with `01-Connect-to-Workspace`.
+Open the notebooks in order, so start with:
+ 
+ - `01-Connect-to-Workspace`.
+ - `02-Create-Experiment`.
+ - and so on...
